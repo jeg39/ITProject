@@ -1,0 +1,10 @@
+drop table if exists users;
+create table users
+  (
+      userID INT (11) primary key auto_increment,
+      userName varchar(64),
+      userPass varchar(64),
+      activeSession varchar(128),
+      firstLogin datetime,
+      lastLogin datetime
+  );
