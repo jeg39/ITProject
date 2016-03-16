@@ -1,0 +1,8 @@
+drop table if exists forums;
+create table forums
+  (
+  forumName varchar(64),
+  forumUser varchar(64),
+  forumActiveSession varchar(128)
+  
+  );
