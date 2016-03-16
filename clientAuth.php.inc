@@ -1,5 +1,5 @@
 <?php
-require_once ("errorLogger.php.inc");
+//require_once ("errorLogger.php.inc");
 class clientDB
 {
       private $db;
@@ -8,7 +8,7 @@ class clientDB
       public function __construct($iniFile)
       {
 	    $ini = parse_ini_file
-	    $this->logger = errorLogger("/var/log/apache2/error.log");
+	   // $this->logger = errorLogger("/var/log/apache2/error.log");
 	    $this->db = new mysqli(
 		$ini['loginDB']['localhost'],
 		$ini['loginDB']['root'],
@@ -17,10 +17,12 @@ class clientDB
 	    $this->salt = $ini['loginDB']['salt'];
 	    if ($this->db->connect_errno > 0)
 	  {
-      $this->logger->log( __FILE__.__LINE__."failed to connect to database re:".$this->db->connect_error);
+      //$this->logger->log
+       echo __FILE__.__LINE__."failed to connect to database re:".$this->db->connect_error.PHP_EOL;
       exit(0);
 	  }
-	  $this->logger->log("Testing...");
+	  //$this->logger->log
+	  echo "Testing...".PHP_EOL;
       }
       
       
@@ -38,7 +40,8 @@ class clientDB
 	  $results = $this->db->query($query);
 	  if (!$results)
 	  {
-	      $this->logger->log("error with results: ".$this->db->error);
+	      //$this->logger->log
+	      echo "error with results: ".$this->db->error.PHP_EOL;
 	      return 0;
 	  } 
 	  $client = $results->fetch_assoc();
@@ -63,9 +66,10 @@ class clientDB
 	  $results = $this->db->query($query);
 	  if (!results)
 	      {
+		  echo "wrong".PHP_EOL;
 		  return array("success"=>false,"message"=>"db failure")
-	  }
 	      }
+	      
 	  $client = $results->fetch_assoc();
 	  {
 	  if ($client['clientPW'] == $this->saltPassword($password)
@@ -80,9 +84,10 @@ class clientDB
       {
 	  if ($this->getClientId($name) != 0)
 	  {
-	      $this->logger->log(" user $name already exist.");
+	      //$this->logger->log
+	      echo " user $name already exist.".PHP_EOL;
 	      $response = array("message"=>"user $name already exist","success"=>false);
-	      return response;
+	      return $response;
 	  }
 	 
 	  $now = date("Y-m-d h:i:s",time());
@@ -93,10 +98,11 @@ class clientDB
 	  $results = $this->db->query($insert);
 	  if (!$results)
 	  {
-	      $this->logger->log("error: ".$this->db->error);
+	     // $this->logger->log
+	     echo "error: ".$this->db->error.PHP_EOL;
 	  }
 	  return array("success"=>true);
-      }
+	}
 }
 
 
