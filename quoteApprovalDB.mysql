@@ -1,0 +1,8 @@
+drop table if exists quoteApproval;
+create table quoteApproval
+    (
+    quoteApprovalID INT(200) primary key auto_increment,
+    quoteAdder varchar(32),
+    quoteForApproval varchar(500),
+    authorOfQuote varchar(500)
+    );

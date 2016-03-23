@@ -2,8 +2,8 @@
 
   class errorLogger
   {
-  private $fp
-  public function  __construct($outputfile = "/var/log/php.log")
+  private $fp;
+  public function __construct($outputfile = "/var/log/php.log")
     {
       $this->fp = fopen($outputfile,"a");
     }

@@ -2,13 +2,20 @@
 <html lang="en">
 <head>
 <meta char-set="utf-8">
-<title>Page Title</title>
+<title>Login Page</title>
 </head>
 <body>
 <form action="rpc.php" method="post">
 <p>username: <input type="text" name="username" /></p>
 <p>password: <input type="password" name="password" /></p>
-<input type="submit" name="request" value="login"/>
+<input type="submit" name="request" value="Register"/>
+<input type="submit" name="request" value="Login"/>
 </form>
+<form action="quoteActions.php" method="post">
+<input type="submit" name="request" value="Random Quote">
+
+
+</form>
+<a href = "browseQuotes.php">Browse Quotes</a>
 </body>
 </html>

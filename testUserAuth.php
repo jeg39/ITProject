@@ -27,7 +27,7 @@ switch($command)
 	break;
     default:
 	echo"usage:\n".$argv[0]." [register|login] <username> <password>".PHP_EOL;
-	b
+	
 
 
 

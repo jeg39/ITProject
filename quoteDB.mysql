@@ -1,0 +1,9 @@
+drop table if exists quotes;
+create table quotes
+    (
+    quoteId INT (200) primary key auto_increment,
+    quoteAdder varchar(32),
+    quoteActual varchar(500),
+    author varchar(500),
+    timeAdded datetime
+    );
