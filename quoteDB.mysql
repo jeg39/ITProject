@@ -6,5 +6,6 @@ create table quotes
     quoteActual varchar(500),
     author varchar(500),
     approveReject INT (3),
+    inaccurate INT (2),
     timeAdded datetime
     );

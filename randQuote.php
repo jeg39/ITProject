@@ -40,7 +40,7 @@ class randQuote
     public function browseQuotes()
     {
 	$counter = 0;
-	$query = "select * from quotes where approveReject = 1;";
+	$query = "select * from quotes where (approveReject = 1) and (inaccurate = 0);";
 	$results = $this->quoteDB->query($query);
 	$allQuotes = array();
 	if($results)
@@ -114,8 +114,8 @@ class randQuote
 	}
 	else
 	{
-	    $insert = "insert into quotes(quoteAdder,quoteActual,author,approveReject) 
-		       values ('$username','$newQuote','$whoSaidQuote',0);";
+	    $insert = "insert into quotes(quoteAdder,quoteActual,author,approveReject,inaccurate) 
+		       values ('$username','$newQuote','$whoSaidQuote',0,0);";
 	    $results = $this->quoteDB->query($insert);
 	    if (!$results)
 	      {
@@ -125,6 +125,18 @@ class randQuote
 	      }
 	    echo "Quote summited for approval.".PHP_EOL;
 	}
+    }
+    public function inaccuracy()
+    {
+	$query = "select * from quotes;";
+	$results = $this->quoteDB->query($query);
+	$arry = $results->fetch_assoc();
+	if($arry["inaccurate"] == 0)
+	{
+	    $update = "update quotes set inaccurate = 1 where inaccurate = 0;";
+	    $updateResults = $this->quoteDB->query($update);
+	}
+	
     }
 }
 
