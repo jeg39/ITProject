@@ -25,7 +25,7 @@ class randQuote
     }
     public function getRandQuote()
     {
-	$randQuery = "select * from quotes order by rand() limit 1;";
+	$randQuery = "select * from quotes where approveReject = 1 order by rand() limit 1;";
 	$results = $this->quoteDB->query($randQuery);
 	if(!$results)
 	{
@@ -33,11 +33,27 @@ class randQuote
 	}
 	else
 	{
-	    $randResults = $results->fetch_assoc();
+	    $randResults = $results->fetch_assoc(); 
 	    return $randResults;
 	}
     }
     public function browseQuotes()
+    {
+	$counter = 0;
+	$query = "select * from quotes where approveReject = 1;";
+	$results = $this->quoteDB->query($query);
+	$allQuotes = array();
+	if($results)
+	{
+	    while($quotes = $results->fetch_assoc())
+	    {
+		$allQuotes[$counter] = array($quotes["quoteId"],$quotes["quoteActual"], $quotes["author"]);
+		$counter++;
+	    }
+	}
+	return $allQuotes;
+    }
+    public function getAllQuotes()
     {
 	$counter = 0;
 	$query = "select * from quotes;";
@@ -47,12 +63,36 @@ class randQuote
 	{
 	    while($quotes = $results->fetch_assoc())
 	    {
-		$allQuotes[$counter] = array($quotes["quoteActual"], $quotes["author"]);
+		$allQuotes[$counter] = array($quotes["quoteId"],$quotes["quoteActual"], $quotes["author"]);
 		$counter++;
 	    }
 	}
 	return $allQuotes;
     }
+    
+    public function deleteQuote($quoteId)
+    {
+	$deleteQuoteQuery = "delete from quotes where quoteId = $quoteId";
+	$results = $this->quoteDB->query($deleteQuoteQuery);
+	if(!$results)
+	{
+	    echo "error with results :".$this->quoteDB->error.PHP_EOL;
+	}
+    }
+    public function quoteApproval($id)
+    {	
+	//$getQuery = "select * from quotes;";
+	//$getQuery = "select * from quoteApproval";
+	//$results = $this->quoteDB->query($getQuery);
+	//$approvalArry = $results->fetch_assoc();
+	//$approveAdder = $approvalArry['quoteAdder'];
+	//$approveQuote = $approvalArry['quoteForApproval'];
+	//$approveAuthor = $approvalArry['authorOfQuote'];
+	$update = "update quotes set approveReject = 1 where quoteId = $id;";
+	//$insert = "insert into quotes(quoteAdder,quoteActual,author,approveReject) 
+	//	  values ($approveAdder,$approveAuthor,$approveQuote,1);";
+	$updateResults = $this->quoteDB->query($update);
+}
     public function addQuote($newQuote,$whoSaidQuote)
     {
 	$username = $_SESSION["username"];
@@ -61,7 +101,7 @@ class randQuote
 	$check = $login->checkAdmin($username,$password);
 	if($check == 1)
 	{
-	    $insert = "insert into quotes(quoteActual,author) values ('$newQuote','$whoSaidQuote');";
+	    $insert = "insert into quotes(quoteActual,author,approveReject) values ('$newQuote','$whoSaidQuote',1);";
 	    $results = $this->quoteDB->query($insert);
 	    if (!$results)
 	      {
@@ -74,8 +114,8 @@ class randQuote
 	}
 	else
 	{
-	    $insert = "insert into quoteApproval(quoteAdder,quoteForApproval,authorOfQuote) 
-		       values ('$username','$newQuote','$whoSaidQuote');";
+	    $insert = "insert into quotes(quoteAdder,quoteActual,author,approveReject) 
+		       values ('$username','$newQuote','$whoSaidQuote',0);";
 	    $results = $this->quoteDB->query($insert);
 	    if (!$results)
 	      {
