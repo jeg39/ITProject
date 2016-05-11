@@ -1,6 +1,5 @@
 <?php
 require_once("randQuote.php");
-$request = $_POST['request'];
 $login = new randQuote("connect.ini");
 $response = $login->getRandQuote();
 

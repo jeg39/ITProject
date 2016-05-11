@@ -1,21 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta char-set="utf-8">
+
 <title>Login Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<form action="rpc.php" method="post">
+<p>Random Quotes</p>
+<!--<form action="rpc.php" method="post">
 <p>username: <input type="text" name="username" /></p>
 <p>password: <input type="password" name="password" /></p>
 <input type="submit" name="request" value="Register"/>
 <input type="submit" name="request" value="Login"/>
+</form>-->
+<div id="login">
+<form action="rpc.php" method="post">
+<p>username: <input type="text" id="username" /></p>
+<p>password: <input type="password" id="password" /></p>
+<button type="button" onclick="sendLogin()">Login</button>
+<button type="button" onclick="sendRegistration()">Register</button>
+</div>
+<p><div id="output"></div></p>
 </form>
-<form action="quoteActions.php" method="post">
-<input type="submit" name="request" value="Random Quote">
+<script>
+  var request;
+  function sendLogin()
+  {
+      name = document.getElementById("username").value;
+      pw = document.getElementById("password").value;
+      request = new XMLHttpRequest();
+      request.onreadystatechange = handleResponse;
+      request.open("POST","rpc.php",true);
+      request.setRequestHeader("Content-type","application/json");
+      data = JSON.stringify({request:"Login",username:name,password:pw});
+      request.send(data);
+   }
+   function sendRegistration()
+   {
+      name = document.getElementById("username").value;
+      pw = document.getElementById("password").value;
+      request = new XMLHttpRequest();
+      request.onreadystatechange = handleResponse2;
+      request.open("POST","rpc.php",true);
+      request.setRequestHeader("Content-type","application/json");
+      var data = JSON.stringify({request:"Register",username:name,password:pw});
+      request.send(data);
+      
+   }
+   function handleResponse()
+   {
+      document.getElementById("output").innerHTML = request.responseText;
+      if(document.getElementById("username").value == "root")
+      {
+	  window.location.href = "adminHomepage.html";
+      }
+      else
+      {
+	  window.location.href = "homepage.html";
+      } 
+   }
+   function handleResponse2()
+   {
+      document.getElementById("output").innerHTML = request.responseText;
+   }
+</script>
+<div id="button"><button type="button" onclick="random()">Random Quote</button></div>
+<div id="randQuote"></div>
+<script>
+
+  function random()
+  {
+    var getRandQuote = new XMLHttpRequest();
+    getRandQuote.onreadystatechange = function()
+      {
+	document.getElementById("randQuote").innerHTML = getRandQuote.responseText;
+      }
+    getRandQuote.open("GET","quoteActions.php",true); 
+    getRandQuote.send();
+   
+    
+    
+  }
 
 
-</form>
-<a href = "browseQuotes.php">Browse Quotes</a>
+
+</script>
+
+<div id="button"><button type="button" onclick="browse()">Browse Quotes</button></div>
+<div id="browseQuotes">
+<script>
+    function browse()
+    {
+	var getAllQuotes = new XMLHttpRequest();
+	getAllQuotes.onreadystatechange = function()
+	  {
+	    document.getElementById("browseQuotes").innerHTML = getAllQuotes.responseText;
+	  }
+	getAllQuotes.open("GET","browseQuotes.php",true);
+	getAllQuotes.send();
+    }
+</script>
+
+<!--<a href = "browseQuotes.php">Browse Quotes</a>-->
 </body>
 </html>

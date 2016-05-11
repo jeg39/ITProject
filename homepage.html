@@ -1,20 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta char-set="utf-8">
 <title>Random Quote </title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-<form action="quoteActions.php" method="post">
-<input type="submit" name="request" value="Random Quote">
-<a href = "browseQuotes.php">Browse Quotes</a>
 
-</form>
-<form action="quoteAdd.php" method="post">
+<div id="button"><button type="button" onclick="random()">Random Quote</button></div>
+<script>
+
+  function random()
+  {
+    var getRandQuote = new XMLHttpRequest();
+    getRandQuote.onreadystatechange = function()
+      {
+	document.getElementById("randQuote").innerHTML = getRandQuote.responseText;
+      }
+    getRandQuote.open("GET","quoteActions.php",true); 
+    getRandQuote.send();
+   
+    
+    
+  }
+
+
+
+</script>
+<div id="randQuote"><p></p></div>
+<div id="button"><a href = "browseQuotes.php">Browse Quotes</a></div>
+
+
+<form  id="webText" action="quoteAdd.php" method="post">
 <textarea row="2" cols ="50" name="addQuote">
 </textarea>
-<p> Quote Author <input type="text" name="author"/></p>
-<input type="submit" name="request" value="Add Quote">
+<p><div id="webText"></div> Quote Author <input type="text" name="author"/></p>
+</form>
+<div id="button"><button type="button" onclick="add()">Submit Quote</button></div>
+<div id="addQuotes"></div>
+<script>
+  function add()
+     {
+	 var addQuote = new XMLHttpRequest();
+	 addQuote.onreadystatechange = function()
+	 {
+	    
+	    document.getElementById("webText").submit();
+	    
+	    alert("Submitted quote for approval!");
+	    
+	    
+	 }
+	 
+	 addQuote.open("GET","quoteAdd.php",true);
+	 addQuote.send();
+     }
+</script>
 
 </form>
 </body>

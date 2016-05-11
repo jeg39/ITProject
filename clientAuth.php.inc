@@ -122,7 +122,10 @@ class clientDB
 	      }
 	  else
 	      {
-		  echo "Username has to be between 4 and 10 characters!".PHP_EOL;
+		  echo "<script type=\"text/javascript\">".
+        "alert('Username has to be between 4 and 10 characters!');window.location = 'index.html';".
+        "</script>";
+        
 	      }    
 	  if ($pLength >=8 && $pLength <= 16)
 	      {
@@ -130,7 +133,10 @@ class clientDB
 	      }
 	  else
 	      {
-		  echo "Password has to be between 8 and 16 characters".PHP_EOL;
+		  echo "<script type=\"text/javascript\">".
+        "alert('Password has to be between 8 and 16 characters');window.location = 'index.html';".
+        "</script>";
+        
 	      }
 	  
 	 

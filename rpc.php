@@ -1,48 +1,53 @@
+
 <?php
 require_once("clientAuth.php.inc");
-$request = $_POST['request'];
+
+//$request = $_POST['request'];
+$request = json_decode(file_get_contents("php://input"),true);
 $response = "FUCK<p>";
-switch($request)
+$check = 0;
+switch($request["request"])
 {
     case "Login":
-	$username = $_POST['username'];
-	$password = $_POST['password'];
+	$username = $request['username'];
+	$password = $request['password'];
 	$login = new clientDB("connect.ini");
 	$response = $login->validateClient($username,$password);
 	if ($response['success']===true)
 	{
-		$response = "Login Successful!<p>";
+		$response = "Login Successful!";
 		$userCheck = $login->checkAdmin($username,$password);
 		if ($userCheck == 1)
 		{
-		    header("Location:adminHomepage.html");
+		   echo 1;//header("Location:adminHomepage.html");
 		}
 		else
 		{
-		   header("Location:homepage.html"); 
+		   echo 0;//header("Location:homepage.html");
 		}
 	}
 	else
 	{
-		$response = "Login Failed:".$response['message']."<p>";
+		$response = "Login Failed:".$response['message'];
 	}
 	break;
     case "Register":
-	$username =$_POST['username'];
-	$password =$_POST['password'];
+	$username =$request['username'];
+	$password =$request['password'];
 	$login = new clientDB("connect.ini");
 	$response = $login->addNewClient($username,$password);
 	if ($response['success']===true)
 	{
-		$response = "Registration Successful!<p>";
-		header("Location:homepage.html");
+		$response = "Registration Successful!";
+		//header("Location:homepage.html");
 	}
 	else
 	{
-		$response = " Try another username.<p>";
-		header("Location:index.html");
+		$response = " Try another username.";
+		//header("Location:index.html");
 	}
 }
-echo $response;
+echo json_encode($response);
 
 ?>
+

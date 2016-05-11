@@ -25,7 +25,7 @@ class randQuote
     }
     public function getRandQuote()
     {
-	$randQuery = "select * from quotes where approveReject = 1 order by rand() limit 1;";
+	$randQuery = "select * from quotes where approveReject = 1 and inaccurate = 0 order by rand() limit 1;";
 	$results = $this->quoteDB->query($randQuery);
 	if(!$results)
 	{
@@ -40,7 +40,7 @@ class randQuote
     public function browseQuotes()
     {
 	$counter = 0;
-	$query = "select * from quotes where (approveReject = 1) and (inaccurate = 0);";
+	$query = "select * from quotes where approveReject = 1 and inaccurate = 0;";
 	$results = $this->quoteDB->query($query);
 	$allQuotes = array();
 	if($results)
@@ -89,9 +89,11 @@ class randQuote
 	//$approveQuote = $approvalArry['quoteForApproval'];
 	//$approveAuthor = $approvalArry['authorOfQuote'];
 	$update = "update quotes set approveReject = 1 where quoteId = $id;";
+	$update2 = "update quotes set inaccurate = 0 where quoteId = $id;";
 	//$insert = "insert into quotes(quoteAdder,quoteActual,author,approveReject) 
 	//	  values ($approveAdder,$approveAuthor,$approveQuote,1);";
 	$updateResults = $this->quoteDB->query($update);
+	$updateResults2 = $this->quoteDB->query($update2);
 }
     public function addQuote($newQuote,$whoSaidQuote)
     {
@@ -101,7 +103,7 @@ class randQuote
 	$check = $login->checkAdmin($username,$password);
 	if($check == 1)
 	{
-	    $insert = "insert into quotes(quoteActual,author,approveReject) values ('$newQuote','$whoSaidQuote',1);";
+	    $insert = "insert into quotes(quoteActual,author,approveReject,inaccurate) values ('$newQuote','$whoSaidQuote',1,0);";
 	    $results = $this->quoteDB->query($insert);
 	    if (!$results)
 	      {
@@ -109,8 +111,12 @@ class randQuote
 		  echo "error: ".$this->quoteDB->error.PHP_EOL;
 	      
 	      }
-	      echo "Successfully added quote to database".PHP_EOL;
-	      return array("success"=>true);
+	      echo "<script type=\"text/javascript\">".
+        "alert('Succesfully added quote to database!');window.location = 'adminHomepage.html';".
+        "</script>";
+        
+	      //echo json_encode("Successfully added quote to database");
+	      //return array("success"=>true);
 	}
 	else
 	{
@@ -123,7 +129,9 @@ class randQuote
 		  echo "error: ".$this->quoteDB->error.PHP_EOL;
 	      
 	      }
-	    echo "Quote summited for approval.".PHP_EOL;
+	    echo "<script type=\"text/javascript\">".
+        "alert('Submitted quote for approval!');window.location = 'homepage.html';".
+        "</script>";
 	}
     }
     public function inaccuracy()
@@ -135,8 +143,9 @@ class randQuote
 	{
 	    $update = "update quotes set inaccurate = 1 where inaccurate = 0;";
 	    $updateResults = $this->quoteDB->query($update);
+	    header("Location:browseQuotes.php");
 	}
-	
+
     }
 }
 

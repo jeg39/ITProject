@@ -1,21 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta char-set="utf-8">
 <title>Admin Homepage</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-<form action="quoteActions.php" method="post">
-<input type="submit" name="request" value="Random Quote">
-</form>
-<a href = "browseQuotes.php">Browse Quotes</a><br>
+<div class="container">
+<div id="button"><button type="button" onclick="random()">Random Quote</button></div>
+<div id="randQuote"></div>
+<script>
+  function random()
+  {
+    var getRandQuote = new XMLHttpRequest();
+    getRandQuote.onreadystatechange = function()
+      {
+	document.getElementById("randQuote").innerHTML = getRandQuote.responseText;
+      }
+    getRandQuote.open("GET","quoteActions.php",true); 
+    getRandQuote.send();
+  }
+</script>
+<div id="button"><button type="button" onclick="browse()">Browse Quotes</button></div>
+<div id="browseQuotes">
+<script>
+    function browse()
+    {
+	var getAllQuotes = new XMLHttpRequest();
+	getAllQuotes.onreadystatechange = function()
+	  {
+	    document.getElementById("browseQuotes").innerHTML = getAllQuotes.responseText;
+	  }
+	getAllQuotes.open("GET","browseQuotes.php",true);
+	getAllQuotes.send();
+    }
+</script>
 <a href = 'approveQuote.php?type=0'>Approve Or Reject</a>
-<form action="quoteAdd.php" method="post">
-<textarea row="2" cols ="50" name="addQuote">
+<form  role= "form" id="webText" action="quoteAdd.php" method="post">
+<div id="webText">
+<div class="form-group">
+<textarea class="form-control" row="2" cols ="50" name="addQuote">
 </textarea>
-<p> Quote Author <input type="text" name="author"/></p>
-<input type="submit" name="request" value="Add Quote">
-
+</div>
+<div class="form-group">
+<input type="text" class="form-control" name="author"/>
+</div>
+</div>
 </form>
+<div id="button"><button type="button" onclick="add()">Submit Quote</button></div>
+<div id="addQuotes"></div>
+<script>
+  function add()
+     {
+	 var addQuote = new XMLHttpRequest();
+	 addQuote.onreadystatechange = function()
+	 {
+	    
+	    document.getElementById("webText").submit();
+	    
+	    alert("Successfully added quote to database");
+	    
+	    
+	 }
+	 
+	 addQuote.open("GET","quoteAdd.php",true);
+	 addQuote.send();
+     }
+</script>
+</div>
 </body>
 </html>
